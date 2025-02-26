@@ -104,6 +104,7 @@ class Achievement(Base):
     badge_image = Column(String)  # Path to badge image
     requirement_type = Column(String)  # e.g., "quiz_score", "level_complete", "points_earned"
     requirement_value = Column(Integer)  # Value needed to earn achievement
+    chapter_id = Column(Integer, nullable=True)  # Optional chapter ID for chapter-specific achievements
     
     # Relationships
     user_achievements = relationship("UserAchievement", back_populates="achievement")

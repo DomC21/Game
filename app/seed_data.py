@@ -477,10 +477,11 @@ Summary of {chapter_title}.
         achievements = [
             {
                 "title": "Foundations Master",
-                "description": "Complete all chapters in Level 1",
+                "description": "Complete all subsections in Chapter 1 and score at least 80% on the chapter quiz",
                 "badge_image": "badge-foundations-master.png",
-                "requirement_type": "level_completion",
-                "requirement_value": 1
+                "requirement_type": "quiz_score",
+                "requirement_value": 80,
+                "chapter_id": 1
             },
             {
                 "title": "Psychology Expert",

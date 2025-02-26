@@ -159,6 +159,7 @@ class AchievementBase(BaseModel):
     badge_image: str
     requirement_type: str
     requirement_value: int
+    chapter_id: Optional[int] = None
 
 
 class AchievementCreate(AchievementBase):

@@ -314,10 +314,19 @@ def check_achievements(db: Session, user_id: int) -> List[models.Achievement]:
             earned = level_progress and level_progress.is_completed
         
         elif achievement.requirement_type == "quiz_score":
-            # Check if user has achieved a perfect score on any quiz
+            # Check if user has achieved the required score on a quiz
             quiz_attempts = get_quiz_attempts(db, user_id)
             for attempt in quiz_attempts:
-                if attempt.score == attempt.max_score:
+                quiz = get_quiz(db, attempt.quiz_id)
+                # If achievement is chapter-specific, check the chapter
+                if achievement.chapter_id and quiz:
+                    chapter = get_chapter(db, quiz.chapter_id)
+                    if chapter and chapter.level_id != achievement.chapter_id:
+                        continue
+                
+                # Check if score meets or exceeds the requirement percentage
+                score_percentage = (attempt.score / attempt.max_score * 100) if attempt.max_score > 0 else 0
+                if score_percentage >= achievement.requirement_value:
                     earned = True
                     break
         
@@ -437,6 +446,7 @@ def process_quiz_submission(
             "badge_image": achievement.badge_image,
             "requirement_type": achievement.requirement_type,
             "requirement_value": achievement.requirement_value,
+            "chapter_id": achievement.chapter_id,
             "earned": True
         }
         achievement_dicts.append(achievement_dict)
