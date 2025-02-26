@@ -5,7 +5,7 @@ import { contentAPI } from '../services/api';
 import { Button } from '../components/ui-js/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../components/ui-js/card';
 import { Badge } from '../components/ui-js/badge';
-import { ChevronLeft, BookOpen, CheckCircle } from 'lucide-react';
+import { ChevronLeft, BookOpen, CheckCircle, List } from 'lucide-react';
 
 const LevelView = () => {
   const { levelId } = useParams();
@@ -13,6 +13,34 @@ const LevelView = () => {
   const [level, setLevel] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  // Function to extract and render subsections from chapter content
+  const renderSubsections = (content) => {
+    // Use regex to extract subsections from the Markdown content
+    const subsectionRegex = /## (.*?)(?=\n## |\n# |\n$)/gs;
+    const subsections = content.match(subsectionRegex) || [];
+    
+    if (subsections.length === 0) return null;
+    
+    return (
+      <div className="mt-4 space-y-2">
+        <h3 className="text-lg font-medium flex items-center">
+          <List className="mr-2 h-4 w-4" />
+          Subsections:
+        </h3>
+        <ul className="list-disc pl-5">
+          {subsections.map((subsection, index) => {
+            const title = subsection.match(/## (.*?)(?=\n|$)/)?.[1] || `Subsection ${index + 1}`;
+            return (
+              <li key={index} className="text-gray-700">
+                {title}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    );
+  };
 
   useEffect(() => {
     const fetchLevel = async () => {
@@ -94,6 +122,9 @@ const LevelView = () => {
                 <CardDescription className="line-clamp-2">
                   {chapter.content.substring(0, 150)}...
                 </CardDescription>
+                
+                {/* Extract and display subsections */}
+                {renderSubsections(chapter.content)}
               </CardContent>
               <CardFooter className="flex justify-between">
                 <Link to={`/chapters/${chapter.id}`}>

@@ -4,7 +4,8 @@ import { useAuth } from '../contexts/AuthContext';
 import { contentAPI } from '../services/api';
 import { Button } from '../components/ui-js/button';
 import { Card, CardContent, CardFooter, CardHeader } from '../components/ui-js/card';
-import { ChevronLeft, ChevronRight, BookOpen } from 'lucide-react';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '../components/ui-js/tabs';
+import { ChevronLeft, ChevronRight, BookOpen, List } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 
 const ChapterView = () => {
@@ -14,6 +15,20 @@ const ChapterView = () => {
   const [chapter, setChapter] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [subsections, setSubsections] = useState([]);
+  const [activeTab, setActiveTab] = useState("full-content");
+  
+  // Function to extract subsections from chapter content
+  const extractSubsections = (content) => {
+    const subsectionRegex = /## (.*?)(?=\n## |\n# |\n$)/gs;
+    const matches = content.match(subsectionRegex) || [];
+    
+    return matches.map((subsection, index) => {
+      const title = subsection.match(/## (.*?)(?=\n|$)/)?.[1] || `Subsection ${index + 1}`;
+      const content = subsection.replace(/## .*?\n/, '').trim();
+      return { id: `subsection-${index}`, title, content };
+    });
+  };
 
   useEffect(() => {
     const fetchChapter = async () => {
@@ -21,6 +36,12 @@ const ChapterView = () => {
         setIsLoading(true);
         const data = await contentAPI.getChapter(token, chapterId);
         setChapter(data);
+        
+        // Extract subsections from chapter content
+        if (data && data.content) {
+          const extractedSubsections = extractSubsections(data.content);
+          setSubsections(extractedSubsections);
+        }
       } catch (err) {
         console.error('Error fetching chapter:', err);
         setError('Failed to load chapter content. Please try again.');
@@ -83,11 +104,53 @@ const ChapterView = () => {
         <h1 className="text-2xl font-bold">{chapter.title}</h1>
       </header>
 
-      {/* Chapter Content */}
+      {/* Chapter Content with Tabs */}
       <Card className="mb-6">
         <CardContent className="pt-6">
-          <div className="prose max-w-none">
-            <ReactMarkdown>{chapter.content}</ReactMarkdown>
+          <Tabs defaultValue="full-content" value={activeTab} onValueChange={setActiveTab} className="mb-6">
+            <TabsList>
+              <TabsTrigger value="full-content">Full Content</TabsTrigger>
+              {subsections.map((subsection) => (
+                <TabsTrigger key={subsection.id} value={subsection.id}>
+                  {subsection.title}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+            
+            <TabsContent value="full-content" className="mt-4">
+              <div className="prose max-w-none">
+                <ReactMarkdown>{chapter.content}</ReactMarkdown>
+              </div>
+            </TabsContent>
+            
+            {subsections.map((subsection) => (
+              <TabsContent key={subsection.id} value={subsection.id} className="mt-4">
+                <div className="prose max-w-none">
+                  <h2>{subsection.title}</h2>
+                  <ReactMarkdown>{subsection.content}</ReactMarkdown>
+                </div>
+              </TabsContent>
+            ))}
+          </Tabs>
+          
+          {/* Subsections List for Mobile/Small Screens */}
+          <div className="md:hidden mt-6">
+            <h3 className="text-lg font-medium flex items-center mb-2">
+              <List className="mr-2 h-4 w-4" />
+              Subsections:
+            </h3>
+            <ul className="list-disc pl-5 space-y-2">
+              {subsections.map((subsection) => (
+                <li key={subsection.id} className="text-gray-700">
+                  <button 
+                    className="text-left hover:text-blue-600 focus:outline-none focus:text-blue-600"
+                    onClick={() => setActiveTab(subsection.id)}
+                  >
+                    {subsection.title}
+                  </button>
+                </li>
+              ))}
+            </ul>
           </div>
         </CardContent>
         <CardFooter className="flex justify-between">
