@@ -1,0 +1,62 @@
+[
+  {
+    "user_id": "test_user_1",
+    "timestamp": "2025-02-26T04:36:12.252293",
+    "chapter": 1,
+    "subsection": 3,
+    "clarity_rating": 4,
+    "difficulty_rating": 3,
+    "engagement_rating": 4,
+    "comments": "The time horizon section is good, but could use more visual aids to explain the glide path concept."
+  },
+  {
+    "user_id": "test_user_2",
+    "timestamp": "2025-02-26T04:36:12.252300",
+    "chapter": 1,
+    "subsection": 7,
+    "clarity_rating": 3,
+    "difficulty_rating": 4,
+    "engagement_rating": 3,
+    "comments": "The risk tolerance assessment was a bit confusing. Maybe add more examples of how different risk profiles might approach the same investment scenario."
+  },
+  {
+    "user_id": "test_user_3",
+    "timestamp": "2025-02-26T04:36:12.252302",
+    "chapter": 1,
+    "subsection": 12,
+    "clarity_rating": 5,
+    "difficulty_rating": 2,
+    "engagement_rating": 4,
+    "comments": "The compound interest examples were great, but I'd like to see more interactive calculators or tools to experiment with different scenarios."
+  },
+  {
+    "user_id": "test_user_4",
+    "timestamp": "2025-02-26T04:36:12.252304",
+    "chapter": 1,
+    "subsection": 15,
+    "clarity_rating": 4,
+    "difficulty_rating": 3,
+    "engagement_rating": 3,
+    "comments": "The section on ETFs vs. mutual funds could be expanded with a clearer comparison table."
+  },
+  {
+    "user_id": "test_user_5",
+    "timestamp": "2025-02-26T04:36:12.252308",
+    "chapter": 1,
+    "subsection": 20,
+    "clarity_rating": 4,
+    "difficulty_rating": 4,
+    "engagement_rating": 5,
+    "comments": "The global investing section was informative but could benefit from more specific examples of international diversification strategies."
+  },
+  {
+    "user_id": "test_user_6",
+    "timestamp": "2025-02-26T04:36:12.252309",
+    "chapter": 1,
+    "quiz": "chapter_quiz",
+    "clarity_rating": 4,
+    "difficulty_rating": 4,
+    "engagement_rating": 4,
+    "comments": "The chapter quiz was comprehensive, but some questions felt too technical for an introductory chapter. Consider adding more scenario-based questions."
+  }
+]
