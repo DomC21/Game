@@ -17,102 +17,167 @@ def seed_data():
             return
         
         # Create levels
-        level1 = schemas.LevelCreate(
-            level_number=1,
-            title="Foundations of Investing",
-            description="Learn the basic terminology and concepts of investing",
-            required_points=0,
-            is_locked=False
-        )
-        db_level1 = crud.create_level(db, level1)
+        levels = [
+            {
+                "level_number": 1,
+                "title": "Foundations of Investing",
+                "description": "Learn the basic terminology, asset types, and fundamental concepts",
+                "required_points": 0,
+                "is_locked": False
+            },
+            {
+                "level_number": 2,
+                "title": "Trading Psychology & Emotional Discipline",
+                "description": "Master emotional discipline, risk appetite, and trading mindset",
+                "required_points": 1000,
+                "is_locked": True
+            },
+            {
+                "level_number": 3,
+                "title": "Technical Analysis Essentials",
+                "description": "Learn chart reading, support/resistance, and trend lines",
+                "required_points": 5000,
+                "is_locked": True
+            },
+            {
+                "level_number": 4,
+                "title": "Fundamental Analysis & Valuation",
+                "description": "Understand financial statements, ratios, and company valuation",
+                "required_points": 10000,
+                "is_locked": True
+            },
+            {
+                "level_number": 5,
+                "title": "Portfolio Construction & Asset Allocation",
+                "description": "Learn to build diversified portfolios and allocate assets effectively",
+                "required_points": 20000,
+                "is_locked": True
+            },
+            {
+                "level_number": 6,
+                "title": "Risk Management Strategies",
+                "description": "Master techniques to protect your investments and manage risk",
+                "required_points": 40000,
+                "is_locked": True
+            },
+            {
+                "level_number": 7,
+                "title": "Advanced Trading Instruments",
+                "description": "Explore options, futures, and other complex financial instruments",
+                "required_points": 80000,
+                "is_locked": True
+            },
+            {
+                "level_number": 8,
+                "title": "Trading Styles & Market Approaches",
+                "description": "Compare swing, day, and long-term trading strategies",
+                "required_points": 150000,
+                "is_locked": True
+            },
+            {
+                "level_number": 9,
+                "title": "Macroeconomic Factors & Market Cycles",
+                "description": "Understand how economic factors influence markets",
+                "required_points": 400000,
+                "is_locked": True
+            },
+            {
+                "level_number": 10,
+                "title": "Putting It All Together & Continuous Improvement",
+                "description": "Integrate all concepts and develop a personal trading plan",
+                "required_points": 1000000,
+                "is_locked": True
+            }
+        ]
         
-        level2 = schemas.LevelCreate(
-            level_number=2,
-            title="Trading Psychology",
-            description="Understand the psychological aspects of trading and investing",
-            required_points=100,
-            is_locked=True
-        )
-        db_level2 = crud.create_level(db, level2)
+        # Add levels to the database
+        level_objects = []
+        for level_data in levels:
+            level = models.Level(**level_data)
+            db.add(level)
+            db.flush()
+            level_objects.append(level)
         
-        level3 = schemas.LevelCreate(
-            level_number=3,
-            title="Technical Analysis Basics",
-            description="Learn how to read charts and identify patterns",
-            required_points=250,
-            is_locked=True
-        )
-        db_level3 = crud.create_level(db, level3)
+        # Store references to the first three levels for backward compatibility with existing code
+        db_level1 = level_objects[0]
+        db_level2 = level_objects[1]
+        db_level3 = level_objects[2]
         
-        # Create chapters for Level 1
-        chapter1 = schemas.ChapterCreate(
-            title="Introduction to Investing",
-            content="""
-# Introduction to Investing
+        # Function to create placeholder chapters for a level
+        def create_placeholder_chapters(db, level_id, level_number, base_title):
+            chapters = []
+            for i in range(1, 21):  # Create 20 chapters per level
+                chapter_title = f"{base_title} {i}"
+                chapter_content = f"""
+# {chapter_title}
 
-Investing is the act of allocating resources, usually money, with the expectation of generating an income or profit. 
-You can invest in many different types of assets, including:
+## Subsection 1: Introduction
+This is an introduction to {chapter_title}.
 
-- Stocks
-- Bonds
-- Mutual Funds
-- ETFs (Exchange-Traded Funds)
-- Real Estate
-- Commodities
+## Subsection 2: Key Concepts
+These are the key concepts for {chapter_title}.
 
-## Why Invest?
+## Subsection 3: Examples
+Here are some examples for {chapter_title}.
 
-Investing allows your money to work for you. When you invest, you're putting your money to work in a way that has the potential to grow in value over time.
+## Subsection 4: Practice
+Practice exercises for {chapter_title}.
 
-## Key Investment Concepts
-
-1. **Risk vs. Return**: Generally, the higher the potential return, the higher the risk.
-2. **Diversification**: Spreading investments across different asset types to reduce risk.
-3. **Compound Interest**: Earning interest on both the initial principal and accumulated interest.
-4. **Time Horizon**: The length of time you plan to hold an investment before needing the money.
-
-In the following chapters, we'll explore these concepts in more detail and learn about different investment vehicles.
-            """,
-            order=1,
-            level_id=db_level1.id
-        )
-        db_chapter1 = crud.create_chapter(db, chapter1)
+## Subsection 5: Summary
+Summary of {chapter_title}.
+"""
+                
+                chapter = models.Chapter(
+                    title=chapter_title,
+                    content=chapter_content,
+                    order=i,
+                    level_id=level_id
+                )
+                db.add(chapter)
+                db.flush()
+                chapters.append(chapter)
+                
+                # Create a quiz for each chapter
+                quiz = models.Quiz(
+                    title=f"Quiz: {chapter_title}",
+                    description=f"Test your knowledge of {chapter_title}",
+                    points_reward=10,
+                    quiz_type="regular",
+                    chapter_id=chapter.id
+                )
+                db.add(quiz)
+                db.flush()
+                
+                # Create placeholder questions for the quiz
+                for j in range(1, 6):  # 5 questions per quiz
+                    question = models.Question(
+                        question_text=f"Question {j} for {chapter_title}?",
+                        explanation=f"Explanation for question {j}",
+                        quiz_id=quiz.id
+                    )
+                    db.add(question)
+                    db.flush()
+                    
+                    # Create options for the question
+                    for k in range(1, 5):  # 4 options per question
+                        option = models.QuestionOption(
+                            option_text=f"Option {k} for question {j}",
+                            is_correct=(k == 1),  # First option is correct
+                            question_id=question.id
+                        )
+                        db.add(option)
+            
+            return chapters
         
-        chapter2 = schemas.ChapterCreate(
-            title="Understanding Stocks",
-            content="""
-# Understanding Stocks
-
-A stock represents ownership in a company. When you buy a stock, you're purchasing a small piece of that company, which makes you a shareholder.
-
-## Stock Basics
-
-- **Shares**: Units of ownership in a company.
-- **Market Capitalization**: The total value of a company's outstanding shares.
-- **Dividends**: Payments made by a company to its shareholders.
-- **Stock Exchange**: A marketplace where stocks are bought and sold.
-
-## Types of Stocks
-
-1. **Common Stocks**: Represent ownership in a company and may provide voting rights.
-2. **Preferred Stocks**: Usually don't have voting rights but have priority over common stocks for dividend payments.
-3. **Growth Stocks**: Companies expected to grow at an above-average rate.
-4. **Value Stocks**: Companies that appear to be undervalued based on their fundamentals.
-5. **Dividend Stocks**: Companies that pay regular dividends to shareholders.
-
-## How to Evaluate Stocks
-
-- **Price-to-Earnings (P/E) Ratio**: Compares a company's share price to its earnings per share.
-- **Earnings Per Share (EPS)**: A company's profit divided by its outstanding shares.
-- **Price-to-Book (P/B) Ratio**: Compares a company's market value to its book value.
-- **Dividend Yield**: Annual dividends per share divided by price per share.
-
-Understanding these concepts will help you make more informed investment decisions when it comes to stocks.
-            """,
-            order=2,
-            level_id=db_level1.id
-        )
-        db_chapter2 = crud.create_chapter(db, chapter2)
+        # Create chapters for each level
+        all_chapters = []
+        for level in level_objects:
+            level_chapters = create_placeholder_chapters(db, level.id, level.level_number, level.title)
+            all_chapters.extend(level_chapters)
+        
+        # Store references to the first two chapters for backward compatibility with existing code
+        db_chapter1 = all_chapters[0]
+        db_chapter2 = all_chapters[1]
         
         # Create quiz for Chapter 1
         quiz1 = schemas.QuizCreate(
@@ -408,51 +473,121 @@ Understanding these concepts will help you make more informed investment decisio
         db.add_all([boss_q5_opt1, boss_q5_opt2, boss_q5_opt3, boss_q5_opt4])
         db.commit()
         
-        # Create achievements
-        achievement1 = schemas.AchievementCreate(
-            title="First Steps",
-            description="Complete your first quiz",
-            badge_image="badge_first_steps.png",
-            requirement_type="quiz_complete",
-            requirement_value=1
-        )
-        crud.create_achievement(db, achievement1)
+        # Create achievements for level completion
+        achievements = [
+            {
+                "title": "Foundations Master",
+                "description": "Complete all chapters in Level 1",
+                "badge_image": "badge-foundations-master.png",
+                "requirement_type": "level_completion",
+                "requirement_value": 1
+            },
+            {
+                "title": "Psychology Expert",
+                "description": "Complete all chapters in Level 2",
+                "badge_image": "badge-psychology-expert.png",
+                "requirement_type": "level_completion",
+                "requirement_value": 2
+            },
+            {
+                "title": "Technical Analyst",
+                "description": "Complete all chapters in Level 3",
+                "badge_image": "badge-technical-analyst.png",
+                "requirement_type": "level_completion",
+                "requirement_value": 3
+            },
+            {
+                "title": "Fundamental Analyst",
+                "description": "Complete all chapters in Level 4",
+                "badge_image": "badge-fundamental-analyst.png",
+                "requirement_type": "level_completion",
+                "requirement_value": 4
+            },
+            {
+                "title": "Portfolio Manager",
+                "description": "Complete all chapters in Level 5",
+                "badge_image": "badge-portfolio-manager.png",
+                "requirement_type": "level_completion",
+                "requirement_value": 5
+            },
+            {
+                "title": "Risk Manager",
+                "description": "Complete all chapters in Level 6",
+                "badge_image": "badge-risk-manager.png",
+                "requirement_type": "level_completion",
+                "requirement_value": 6
+            },
+            {
+                "title": "Advanced Trader",
+                "description": "Complete all chapters in Level 7",
+                "badge_image": "badge-advanced-trader.png",
+                "requirement_type": "level_completion",
+                "requirement_value": 7
+            },
+            {
+                "title": "Trading Strategist",
+                "description": "Complete all chapters in Level 8",
+                "badge_image": "badge-trading-strategist.png",
+                "requirement_type": "level_completion",
+                "requirement_value": 8
+            },
+            {
+                "title": "Market Economist",
+                "description": "Complete all chapters in Level 9",
+                "badge_image": "badge-market-economist.png",
+                "requirement_type": "level_completion",
+                "requirement_value": 9
+            },
+            {
+                "title": "Master Investor",
+                "description": "Complete all chapters in Level 10",
+                "badge_image": "badge-master-investor.png",
+                "requirement_type": "level_completion",
+                "requirement_value": 10
+            }
+        ]
         
-        achievement2 = schemas.AchievementCreate(
-            title="Perfect Score",
-            description="Get a perfect score on any quiz",
-            badge_image="badge_perfect_score.png",
-            requirement_type="quiz_score",
-            requirement_value=100
-        )
-        crud.create_achievement(db, achievement2)
+        # Add achievements to the database
+        for achievement_data in achievements:
+            achievement = models.Achievement(**achievement_data)
+            db.add(achievement)
         
-        achievement3 = schemas.AchievementCreate(
-            title="Level 1 Master",
-            description="Complete Level 1",
-            badge_image="badge_level1_master.png",
-            requirement_type="level_complete",
-            requirement_value=1
-        )
-        crud.create_achievement(db, achievement3)
+        # Add some general achievements
+        general_achievements = [
+            {
+                "title": "First Steps",
+                "description": "Complete your first quiz",
+                "badge_image": "badge-first-steps.png",
+                "requirement_type": "quiz_complete",
+                "requirement_value": 1
+            },
+            {
+                "title": "Perfect Score",
+                "description": "Get a perfect score on any quiz",
+                "badge_image": "badge-perfect-score.png",
+                "requirement_type": "quiz_score",
+                "requirement_value": 100
+            },
+            {
+                "title": "Point Collector",
+                "description": "Earn 100 points",
+                "badge_image": "badge-point-collector.png",
+                "requirement_type": "points_earned",
+                "requirement_value": 100
+            },
+            {
+                "title": "Boss Slayer",
+                "description": "Successfully complete a Boss Fight quiz",
+                "badge_image": "badge-boss-slayer.png",
+                "requirement_type": "boss_fight_complete",
+                "requirement_value": 1
+            }
+        ]
         
-        achievement4 = schemas.AchievementCreate(
-            title="Point Collector",
-            description="Earn 100 points",
-            badge_image="badge_point_collector.png",
-            requirement_type="points_earned",
-            requirement_value=100
-        )
-        crud.create_achievement(db, achievement4)
-        
-        achievement5 = schemas.AchievementCreate(
-            title="Boss Slayer",
-            description="Successfully complete a Boss Fight quiz",
-            badge_image="badge_boss_slayer.png",
-            requirement_type="boss_fight_complete",
-            requirement_value=1
-        )
-        crud.create_achievement(db, achievement5)
+        # Add general achievements to the database
+        for achievement_data in general_achievements:
+            achievement = models.Achievement(**achievement_data)
+            db.add(achievement)
         
         print("Database seeded successfully!")
     
