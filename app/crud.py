@@ -321,7 +321,7 @@ def check_achievements(db: Session, user_id: int) -> List[models.Achievement]:
                 # If achievement is chapter-specific, check the chapter
                 if achievement.chapter_id and quiz:
                     chapter = get_chapter(db, quiz.chapter_id)
-                    if chapter and chapter.level_id != achievement.chapter_id:
+                    if chapter and chapter.id != achievement.chapter_id:
                         continue
                 
                 # Check if score meets or exceeds the requirement percentage
