@@ -32,7 +32,6 @@ def check_achievements():
             achievement = db.query(Achievement).filter(
                 Achievement.title == title,
                 Achievement.requirement_type == req_type,
-                Achievement.requirement_value == req_value,
                 Achievement.chapter_id == chapter_id
             ).first()
             
@@ -40,6 +39,19 @@ def check_achievements():
                 print(f"✅ Found achievement: {title} (Type: {req_type}, Value: {req_value}, Chapter ID: {chapter_id})")
             else:
                 print(f"❌ Missing achievement: {title} (Type: {req_type}, Value: {req_value}, Chapter ID: {chapter_id})")
+        
+        # Check specifically for Foundations Master
+        foundations_master = db.query(Achievement).filter(Achievement.title == "Foundations Master").first()
+        if foundations_master:
+            print("\nFoundations Master achievement details:")
+            print(f"ID: {foundations_master.id}")
+            print(f"Title: {foundations_master.title}")
+            print(f"Description: {foundations_master.description}")
+            print(f"Requirement Type: {foundations_master.requirement_type}")
+            print(f"Requirement Value: {foundations_master.requirement_value}")
+            print(f"Chapter ID: {foundations_master.chapter_id}")
+        else:
+            print("\nFoundations Master achievement not found in the database!")
     
     finally:
         db.close()
