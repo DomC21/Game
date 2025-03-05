@@ -151,3 +151,19 @@ class QuizAttempt(Base):
     # Relationships
     user = relationship("User", back_populates="quiz_attempts")
     quiz = relationship("Quiz", back_populates="attempts")
+
+
+class QuizAnswer(Base):
+    __tablename__ = "quiz_answers"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    question_id = Column(Integer, ForeignKey("questions.id"))
+    selected_option_id = Column(Integer, ForeignKey("question_options.id"))
+    is_correct = Column(Boolean, default=False)
+    answered_at = Column(DateTime(timezone=True), server_default=func.now())
+    
+    # Relationships
+    user = relationship("User")
+    question = relationship("Question")
+    selected_option = relationship("QuestionOption")

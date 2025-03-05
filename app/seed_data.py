@@ -239,11 +239,27 @@ def seed_data():
             },
             {
                 "title": "Psychology Expert",
-                "description": "Complete all chapters in Level 2",
+                "description": "Complete all subsections in Chapter 2 and score at least 80% on the chapter quiz",
                 "badge_image": "badge-psychology-expert.png",
-                "requirement_type": "level_completion",
-                "requirement_value": 2,
-                "chapter_id": None
+                "requirement_type": "quiz_score",
+                "requirement_value": 80,
+                "chapter_id": 2
+            },
+            {
+                "title": "Emotional Mastery",
+                "description": "Complete the emotional self-assessment exercises in all subsections",
+                "badge_image": "badge-emotional-mastery.png",
+                "requirement_type": "subsection_completion",
+                "requirement_value": 22,
+                "chapter_id": 2
+            },
+            {
+                "title": "Bias Buster",
+                "description": "Correctly identify all cognitive biases in the Chapter 2 quiz",
+                "badge_image": "badge-bias-buster.png",
+                "requirement_type": "special_quiz_achievement",
+                "requirement_value": 1,
+                "chapter_id": 2
             },
             {
                 "title": "Technical Analyst",
