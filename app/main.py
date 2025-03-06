@@ -21,7 +21,10 @@ app = FastAPI(title="Trading & Investing Gamified eBook API")
 # Configure CORS for production
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://trading-learning-app-yfnvf7wl.devinapps.com"],  # Only allow the frontend domain
+    allow_origins=[
+        "https://trading-learning-app-yfnvf7wl.devinapps.com",
+        "https://gamified-ebook-app-s4552thf.devinapps.com"
+    ],  # Allow both old and new frontend domains
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE"],  # Specify allowed methods
     allow_headers=["*"],  # Allows all headers
