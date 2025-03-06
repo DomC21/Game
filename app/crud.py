@@ -344,6 +344,27 @@ def check_achievements(db: Session, user_id: int) -> List[models.Achievement]:
                     earned = True
                     break
         
+        elif achievement.requirement_type == "subsection_completion":
+            # Check if user has completed the required number of subsections in a chapter
+            if achievement.chapter_id:
+                # Get all quizzes for the specified chapter
+                chapter = get_chapter(db, chapter_id=achievement.chapter_id)
+                if chapter:
+                    quizzes = get_quizzes_by_chapter(db, chapter.id)
+                    completed_quizzes = 0
+                    
+                    # Count completed quizzes (excluding the chapter quiz)
+                    for quiz in quizzes:
+                        if quiz.quiz_type != "chapter_quiz":
+                            # Check if user has completed this quiz
+                            attempts = get_quiz_attempts(db, user_id, quiz.id)
+                            if attempts:
+                                completed_quizzes += 1
+                    
+                    # Check if the required number of subsections are completed
+                    if completed_quizzes >= achievement.requirement_value:
+                        earned = True
+            
         elif achievement.requirement_type == "special_quiz_achievement":
             # Check if user has earned the special quiz achievement
             if achievement.title == "Bias Buster":
