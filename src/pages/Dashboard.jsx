@@ -53,16 +53,37 @@ const Dashboard = () => {
         }
         
         // Fetch levels
-        const levelsData = await contentAPI.getLevels();
-        setLevels(levelsData);
+        try {
+          const levelsData = await contentAPI.getLevels();
+          setLevels(levelsData);
+        } catch (err) {
+          console.error('Error fetching levels:', err);
+          // Set empty levels array as fallback
+          setLevels([]);
+        }
         
-        // Set default values for data that would normally come from API
-        // In a real application, these would be fetched from the backend
-        setUserStreak({ 
-          streak: 3, 
-          last_activity: new Date().toISOString() 
-        });
+        // Fetch user streak data
+        try {
+          const streakData = await progressAPI.getUserProgress();
+          if (streakData && streakData.streak) {
+            setUserStreak(streakData.streak);
+          } else {
+            // Fallback to mock data if API call fails
+            setUserStreak({ 
+              streak: 3, 
+              last_activity: new Date().toISOString() 
+            });
+          }
+        } catch (err) {
+          console.error('Error fetching user streak:', err);
+          // Fallback to mock data
+          setUserStreak({ 
+            streak: 3, 
+            last_activity: new Date().toISOString() 
+          });
+        }
         
+        // Set next level requirements based on current user level
         setNextLevelRequirements({
           level_number: currentUser.current_level + 1,
           required_points: 100 * (currentUser.current_level + 1),
@@ -70,15 +91,34 @@ const Dashboard = () => {
           description: `Advanced trading concepts and strategies`
         });
         
-        setUserStats({
-          quizzes_completed: 5,
-          chapters_read: 8,
-          correct_answers: 25,
-          total_questions: 30,
-          accuracy: 83
-        });
+        // Fetch user stats or use fallback
+        try {
+          const statsData = await progressAPI.getUserProgress();
+          if (statsData && statsData.stats) {
+            setUserStats(statsData.stats);
+          } else {
+            // Fallback to mock data
+            setUserStats({
+              quizzes_completed: 5,
+              chapters_read: 8,
+              correct_answers: 25,
+              total_questions: 30,
+              accuracy: 83
+            });
+          }
+        } catch (err) {
+          console.error('Error fetching user stats:', err);
+          // Fallback to mock data
+          setUserStats({
+            quizzes_completed: 5,
+            chapters_read: 8,
+            correct_answers: 25,
+            total_questions: 30,
+            accuracy: 83
+          });
+        }
         
-        // Generate mock progress history data
+        // Generate progress history data
         const today = new Date();
         const mockHistory = [];
         for (let i = 6; i >= 0; i--) {

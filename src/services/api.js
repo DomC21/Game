@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const BASE_URL = import.meta.env.VITE_API_URL || 'https://app-yinpjyoy.fly.dev';
 
 // Create axios instance with default config
 const api = axios.create({
@@ -122,75 +122,8 @@ export const progressAPI = {
 export const contentAPI = {
   getLevels: async () => {
     try {
-      // Mock levels data
-      const mockLevels = [
-        {
-          id: 1,
-          level_number: 1,
-          title: "Foundations of Investing",
-          description: "Learn the basic terminology, asset types, and fundamental concepts",
-          required_points: 0,
-          is_locked: false,
-          chapters: [
-            {
-              id: 1,
-              title: "Introduction to Investing",
-              description: "Understanding the basics of investing and why it matters",
-              content: "Introduction to investing content...",
-              quiz_id: 1
-            },
-            {
-              id: 2,
-              title: "Asset Classes",
-              description: "Exploring different types of investments: stocks, bonds, ETFs, and more",
-              content: "Asset classes content...",
-              quiz_id: 2
-            },
-            {
-              id: 3,
-              title: "Risk and Return",
-              description: "Understanding the relationship between risk and potential returns",
-              content: "Risk and return content...",
-              quiz_id: 3
-            }
-          ]
-        },
-        {
-          id: 2,
-          level_number: 2,
-          title: "Trading Psychology",
-          description: "Master emotional discipline, risk appetite, and trading mindset",
-          required_points: 100,
-          is_locked: false,
-          chapters: [
-            {
-              id: 4,
-              title: "Emotional Discipline",
-              description: "Learning to control emotions during market volatility",
-              content: "Emotional discipline content...",
-              quiz_id: 4
-            },
-            {
-              id: 5,
-              title: "Cognitive Biases",
-              description: "Recognizing and overcoming common cognitive biases in trading",
-              content: "Cognitive biases content...",
-              quiz_id: 5
-            }
-          ]
-        },
-        {
-          id: 3,
-          level_number: 3,
-          title: "Technical Analysis Basics",
-          description: "Learn chart reading, support/resistance, and trend lines",
-          required_points: 250,
-          is_locked: true,
-          chapters: []
-        }
-      ];
-      
-      return mockLevels;
+      const response = await api.get('/api/levels');
+      return response.data;
     } catch (error) {
       console.error('Get levels API error:', error);
       throw error;
