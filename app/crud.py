@@ -344,6 +344,36 @@ def check_achievements(db: Session, user_id: int) -> List[models.Achievement]:
                     earned = True
                     break
         
+        elif achievement.requirement_type == "special_quiz_achievement":
+            # Check if user has earned the special quiz achievement
+            if achievement.title == "Bias Buster":
+                # Get all quiz attempts for Chapter 2
+                quiz_attempts = get_quiz_attempts(db, user_id)
+                for attempt in quiz_attempts:
+                    quiz = get_quiz(db, attempt.quiz_id)
+                    # Check if this is the Chapter 2 quiz
+                    if quiz and quiz.chapter_id == 2:
+                        # Get the bias-related questions
+                        bias_questions = [q for q in get_questions_by_quiz(db, quiz.id) 
+                                        if "bias" in q.question_text.lower()]
+                        
+                        # Check if all bias questions were answered correctly
+                        all_correct = True
+                        for question in bias_questions:
+                            # Get the user's answer for this question
+                            user_answer = db.query(models.QuizAnswer).filter(
+                                models.QuizAnswer.user_id == user_id,
+                                models.QuizAnswer.question_id == question.id
+                            ).first()
+                            
+                            if not user_answer or not user_answer.is_correct:
+                                all_correct = False
+                                break
+                        
+                        if all_correct and bias_questions:
+                            earned = True
+                            break
+        
         # Award achievement if earned
         if earned:
             award_achievement(db, user_id, achievement.id)
@@ -405,6 +435,15 @@ def process_quiz_submission(
                 break
         
         correct_answers[question.id] = is_correct
+        
+        # Save the user's answer
+        user_answer = models.QuizAnswer(
+            user_id=user_id,
+            question_id=question.id,
+            selected_option_id=selected_option_id,
+            is_correct=is_correct
+        )
+        db.add(user_answer)
     
     # Calculate points earned (based on percentage correct)
     # For boss fight quizzes, we require at least 80% correct to earn any points
