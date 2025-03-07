@@ -262,6 +262,30 @@ def seed_data():
                 "chapter_id": 2
             },
             {
+                "title": "Chart Master",
+                "description": "Complete all subsections in Chapter 3 and score at least 80% on the chapter quiz",
+                "badge_image": "badge-chart-master.png",
+                "requirement_type": "quiz_score",
+                "requirement_value": 80,
+                "chapter_id": 3
+            },
+            {
+                "title": "Pattern Recognition Expert",
+                "description": "Correctly identify all chart patterns in the Chapter 3 quiz",
+                "badge_image": "badge-pattern-recognition.png",
+                "requirement_type": "special_quiz_achievement",
+                "requirement_value": 1,
+                "chapter_id": 3
+            },
+            {
+                "title": "Indicator Wizard",
+                "description": "Complete all technical indicator exercises in the subsections",
+                "badge_image": "badge-indicator-wizard.png",
+                "requirement_type": "subsection_completion",
+                "requirement_value": 20,
+                "chapter_id": 3
+            },
+            {
                 "title": "Technical Analyst",
                 "description": "Complete all chapters in Level 3",
                 "badge_image": "badge-technical-analyst.png",
