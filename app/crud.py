@@ -394,6 +394,50 @@ def check_achievements(db: Session, user_id: int) -> List[models.Achievement]:
                         if all_correct and bias_questions:
                             earned = True
                             break
+            
+            elif achievement.title == "Pattern Recognition Expert":
+                # Get all quiz attempts for Chapter 3
+                quiz_attempts = get_quiz_attempts(db, user_id)
+                for attempt in quiz_attempts:
+                    quiz = get_quiz(db, attempt.quiz_id)
+                    # Check if this is the Chapter 3 quiz
+                    if quiz and quiz.chapter_id == 3:
+                        # Get the pattern-related questions
+                        pattern_questions = [q for q in get_questions_by_quiz(db, quiz.id) 
+                                          if "pattern" in q.question_text.lower()]
+                        
+                        # Check if all pattern questions were answered correctly
+                        all_correct = True
+                        for question in pattern_questions:
+                            # Get the user's answer for this question
+                            user_answer = db.query(models.QuizAnswer).filter(
+                                models.QuizAnswer.user_id == user_id,
+                                models.QuizAnswer.question_id == question.id
+                            ).first()
+                            
+                            if not user_answer or not user_answer.is_correct:
+                                all_correct = False
+                                break
+                        
+                        if all_correct and pattern_questions:
+                            earned = True
+                            break
+            
+            elif achievement.title == "Indicator Wizard":
+                # For the Indicator Wizard achievement, we need to check if the user has completed
+                # the Chapter 3 quiz with a high score
+                
+                # Get all quiz attempts for Chapter 3
+                quiz_attempts = get_quiz_attempts(db, user_id)
+                for attempt in quiz_attempts:
+                    quiz = get_quiz(db, attempt.quiz_id)
+                    # Check if this is the Chapter 3 quiz
+                    if quiz and quiz.chapter_id == 3:
+                        # Check if the score is high enough (80% or higher)
+                        score_percentage = (attempt.score / attempt.max_score * 100) if attempt.max_score > 0 else 0
+                        if score_percentage >= 80:
+                            earned = True
+                            break
         
         # Award achievement if earned
         if earned:
