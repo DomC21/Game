@@ -286,6 +286,38 @@ def seed_data():
                 "chapter_id": 3
             },
             {
+                "title": "Fundamentals Guru",
+                "description": "Complete all 22 subsections in Chapter 4 and score at least 80% on the chapter quiz",
+                "badge_image": "badge-fundamentals-guru.png",
+                "requirement_type": "quiz_score",
+                "requirement_value": 80,
+                "chapter_id": 4
+            },
+            {
+                "title": "Financial Detective",
+                "description": "Correctly identify the key takeaways from real companies' income statements and balance sheets",
+                "badge_image": "badge-financial-detective.png",
+                "requirement_type": "special_quiz_achievement",
+                "requirement_value": 1,
+                "chapter_id": 4
+            },
+            {
+                "title": "Valuation Virtuoso",
+                "description": "Demonstrate proficiency in valuation methods by correctly answering all valuation-related questions",
+                "badge_image": "badge-valuation-virtuoso.png",
+                "requirement_type": "special_quiz_achievement",
+                "requirement_value": 1,
+                "chapter_id": 4
+            },
+            {
+                "title": "Moat Master",
+                "description": "Correctly identify and analyze different types of economic moats",
+                "badge_image": "badge-moat-master.png",
+                "requirement_type": "special_quiz_achievement",
+                "requirement_value": 1,
+                "chapter_id": 4
+            },
+            {
                 "title": "Technical Analyst",
                 "description": "Complete all chapters in Level 3",
                 "badge_image": "badge-technical-analyst.png",

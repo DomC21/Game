@@ -167,3 +167,15 @@ class QuizAnswer(Base):
     user = relationship("User")
     question = relationship("Question")
     selected_option = relationship("QuestionOption")
+
+
+class SpecialQuizAchievementRequirement(Base):
+    __tablename__ = "special_quiz_achievement_requirements"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    achievement_id = Column(Integer, ForeignKey("achievements.id"))
+    question_id = Column(Integer, ForeignKey("questions.id"))
+    
+    # Relationships
+    achievement = relationship("Achievement")
+    question = relationship("Question")
