@@ -438,6 +438,230 @@ def check_achievements(db: Session, user_id: int) -> List[models.Achievement]:
                         if score_percentage >= 80:
                             earned = True
                             break
+            
+            elif achievement.title == "Fundamentals Guru":
+                # For the Fundamentals Guru achievement, we need to check if the user has completed
+                # the Chapter 4 quiz with a high score (80% or higher)
+                
+                # Get all quiz attempts for Chapter 4
+                quiz_attempts = get_quiz_attempts(db, user_id)
+                for attempt in quiz_attempts:
+                    quiz = get_quiz(db, attempt.quiz_id)
+                    # Check if this is the Chapter 4 quiz
+                    if quiz and quiz.chapter_id == 4:
+                        # Check if the score is high enough (80% or higher)
+                        score_percentage = (attempt.score / attempt.max_score * 100) if attempt.max_score > 0 else 0
+                        if score_percentage >= 80:
+                            earned = True
+                            break
+            
+            elif achievement.title == "Financial Detective":
+                # For the Financial Detective achievement, we need to check if the user has correctly
+                # answered all financial statement-related questions in the Chapter 4 quiz
+                
+                # Get all quiz attempts for Chapter 4
+                quiz_attempts = get_quiz_attempts(db, user_id)
+                for attempt in quiz_attempts:
+                    quiz = get_quiz(db, attempt.quiz_id)
+                    # Check if this is the Chapter 4 quiz
+                    if quiz and quiz.chapter_id == 4:
+                        # Get the financial statement-related questions
+                        financial_questions = [q for q in get_questions_by_quiz(db, quiz.id) 
+                                            if any(term in q.question_text.lower() for term in 
+                                                ["financial statement", "income statement", "balance sheet", "cash flow"])]
+                        
+                        # Check if all financial statement questions were answered correctly
+                        all_correct = True
+                        for question in financial_questions:
+                            # Get the user's answer for this question
+                            user_answer = db.query(models.QuizAnswer).filter(
+                                models.QuizAnswer.user_id == user_id,
+                                models.QuizAnswer.question_id == question.id
+                            ).first()
+                            
+                            if not user_answer or not user_answer.is_correct:
+                                all_correct = False
+                                break
+                        
+                        if all_correct and financial_questions:
+                            earned = True
+                            break
+            
+            elif achievement.title == "Valuation Virtuoso":
+                # For the Valuation Virtuoso achievement, we need to check if the user has correctly
+                # answered all valuation-related questions in the Chapter 4 quiz
+                
+                # Get all quiz attempts for Chapter 4
+                quiz_attempts = get_quiz_attempts(db, user_id)
+                for attempt in quiz_attempts:
+                    quiz = get_quiz(db, attempt.quiz_id)
+                    # Check if this is the Chapter 4 quiz
+                    if quiz and quiz.chapter_id == 4:
+                        # Get the valuation-related questions
+                        valuation_questions = [q for q in get_questions_by_quiz(db, quiz.id) 
+                                            if any(term in q.question_text.lower() for term in 
+                                                ["valuation", "dcf", "discounted cash flow", "dividend discount", "comparable", "intrinsic value"])]
+                        
+                        # Check if all valuation questions were answered correctly
+                        all_correct = True
+                        for question in valuation_questions:
+                            # Get the user's answer for this question
+                            user_answer = db.query(models.QuizAnswer).filter(
+                                models.QuizAnswer.user_id == user_id,
+                                models.QuizAnswer.question_id == question.id
+                            ).first()
+                            
+                            if not user_answer or not user_answer.is_correct:
+                                all_correct = False
+                                break
+                        
+                        if all_correct and valuation_questions:
+                            earned = True
+                            break
+            
+            elif achievement.title == "Moat Master":
+                # For the Moat Master achievement, we need to check if the user has correctly
+                # answered all economic moat-related questions in the Chapter 4 quiz
+                
+                # Get all quiz attempts for Chapter 4
+                quiz_attempts = get_quiz_attempts(db, user_id)
+                for attempt in quiz_attempts:
+                    quiz = get_quiz(db, attempt.quiz_id)
+                    # Check if this is the Chapter 4 quiz
+                    if quiz and quiz.chapter_id == 4:
+                        # Get the economic moat-related questions
+                        moat_questions = [q for q in get_questions_by_quiz(db, quiz.id) 
+                                        if any(term in q.question_text.lower() for term in 
+                                            ["economic moat", "competitive advantage", "moat", "switching cost", "network effect"])]
+                        
+                        # Check if all moat questions were answered correctly
+                        all_correct = True
+                        for question in moat_questions:
+                            # Get the user's answer for this question
+                            user_answer = db.query(models.QuizAnswer).filter(
+                                models.QuizAnswer.user_id == user_id,
+                                models.QuizAnswer.question_id == question.id
+                            ).first()
+                            
+                            if not user_answer or not user_answer.is_correct:
+                                all_correct = False
+                                break
+                        
+                        if all_correct and moat_questions:
+                            earned = True
+                            break
+            
+            elif achievement.title == "Allocation Architect":
+                # For the Allocation Architect achievement, we need to check if the user has completed
+                # the Chapter 5 quiz with a high score (80% or higher)
+                
+                # Get all quiz attempts for Chapter 5
+                quiz_attempts = get_quiz_attempts(db, user_id)
+                for attempt in quiz_attempts:
+                    quiz = get_quiz(db, attempt.quiz_id)
+                    # Check if this is the Chapter 5 quiz
+                    if quiz and quiz.chapter_id == 5:
+                        # Check if the score is high enough (80% or higher)
+                        score_percentage = (attempt.score / attempt.max_score * 100) if attempt.max_score > 0 else 0
+                        if score_percentage >= 80:
+                            earned = True
+                            break
+            
+            elif achievement.title == "Diversification Dynamo":
+                # For the Diversification Dynamo achievement, we need to check if the user has correctly
+                # answered all diversification-related questions in the Chapter 5 quiz
+                
+                # Get all quiz attempts for Chapter 5
+                quiz_attempts = get_quiz_attempts(db, user_id)
+                for attempt in quiz_attempts:
+                    quiz = get_quiz(db, attempt.quiz_id)
+                    # Check if this is the Chapter 5 quiz
+                    if quiz and quiz.chapter_id == 5:
+                        # Get the diversification-related questions
+                        diversification_questions = [q for q in get_questions_by_quiz(db, quiz.id) 
+                                                if any(term in q.question_text.lower() for term in 
+                                                    ["diversification", "asset class", "asset allocation", "correlation", "portfolio"])]
+                        
+                        # Check if all diversification questions were answered correctly
+                        all_correct = True
+                        for question in diversification_questions:
+                            # Get the user's answer for this question
+                            user_answer = db.query(models.QuizAnswer).filter(
+                                models.QuizAnswer.user_id == user_id,
+                                models.QuizAnswer.question_id == question.id
+                            ).first()
+                            
+                            if not user_answer or not user_answer.is_correct:
+                                all_correct = False
+                                break
+                        
+                        if all_correct and diversification_questions:
+                            earned = True
+                            break
+            
+            elif achievement.title == "Rebalancing Ruler":
+                # For the Rebalancing Ruler achievement, we need to check if the user has correctly
+                # answered all rebalancing-related questions in the Chapter 5 quiz
+                
+                # Get all quiz attempts for Chapter 5
+                quiz_attempts = get_quiz_attempts(db, user_id)
+                for attempt in quiz_attempts:
+                    quiz = get_quiz(db, attempt.quiz_id)
+                    # Check if this is the Chapter 5 quiz
+                    if quiz and quiz.chapter_id == 5:
+                        # Get the rebalancing-related questions
+                        rebalancing_questions = [q for q in get_questions_by_quiz(db, quiz.id) 
+                                            if any(term in q.question_text.lower() for term in 
+                                                ["rebalancing", "threshold rebalancing", "calendar rebalancing", "portfolio drift"])]
+                        
+                        # Check if all rebalancing questions were answered correctly
+                        all_correct = True
+                        for question in rebalancing_questions:
+                            # Get the user's answer for this question
+                            user_answer = db.query(models.QuizAnswer).filter(
+                                models.QuizAnswer.user_id == user_id,
+                                models.QuizAnswer.question_id == question.id
+                            ).first()
+                            
+                            if not user_answer or not user_answer.is_correct:
+                                all_correct = False
+                                break
+                        
+                        if all_correct and rebalancing_questions:
+                            earned = True
+                            break
+            
+            elif achievement.title == "Policy Pro":
+                # For the Policy Pro achievement, we need to check if the user has correctly
+                # answered all Investment Policy Statement (IPS)-related questions in the Chapter 5 quiz
+                
+                # Get all quiz attempts for Chapter 5
+                quiz_attempts = get_quiz_attempts(db, user_id)
+                for attempt in quiz_attempts:
+                    quiz = get_quiz(db, attempt.quiz_id)
+                    # Check if this is the Chapter 5 quiz
+                    if quiz and quiz.chapter_id == 5:
+                        # Get the IPS-related questions
+                        ips_questions = [q for q in get_questions_by_quiz(db, quiz.id) 
+                                    if any(term in q.question_text.lower() for term in 
+                                        ["investment policy statement", "ips", "policy statement", "investment policy"])]
+                        
+                        # Check if all IPS questions were answered correctly
+                        all_correct = True
+                        for question in ips_questions:
+                            # Get the user's answer for this question
+                            user_answer = db.query(models.QuizAnswer).filter(
+                                models.QuizAnswer.user_id == user_id,
+                                models.QuizAnswer.question_id == question.id
+                            ).first()
+                            
+                            if not user_answer or not user_answer.is_correct:
+                                all_correct = False
+                                break
+                        
+                        if all_correct and ips_questions:
+                            earned = True
+                            break
         
         # Award achievement if earned
         if earned:

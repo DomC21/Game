@@ -318,6 +318,38 @@ def seed_data():
                 "chapter_id": 4
             },
             {
+                "title": "Allocation Architect",
+                "description": "Complete all 22 subsections in Chapter 5 and score at least 80% on the quiz",
+                "badge_image": "badge-allocation-architect.png",
+                "requirement_type": "quiz_score",
+                "requirement_value": 80,
+                "chapter_id": 5
+            },
+            {
+                "title": "Diversification Dynamo",
+                "description": "Successfully build a sample allocation (3+ asset classes) and justify each percentage",
+                "badge_image": "badge-diversification-dynamo.png",
+                "requirement_type": "special_quiz_achievement",
+                "requirement_value": 1,
+                "chapter_id": 5
+            },
+            {
+                "title": "Rebalancing Ruler",
+                "description": "Demonstrate the correct process of threshold rebalancing in a scenario-based mini-quiz",
+                "badge_image": "badge-rebalancing-ruler.png",
+                "requirement_type": "special_quiz_achievement",
+                "requirement_value": 1,
+                "chapter_id": 5
+            },
+            {
+                "title": "Policy Pro",
+                "description": "Draft a personal Investment Policy Statement (IPS) and identify the key sections outlined in this chapter",
+                "badge_image": "badge-policy-pro.png",
+                "requirement_type": "special_quiz_achievement",
+                "requirement_value": 1,
+                "chapter_id": 5
+            },
+            {
                 "title": "Technical Analyst",
                 "description": "Complete all chapters in Level 3",
                 "badge_image": "badge-technical-analyst.png",
