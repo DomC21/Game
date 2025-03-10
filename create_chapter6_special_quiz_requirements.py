@@ -2,7 +2,7 @@ import sys
 import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from app.models import SpecialQuizAchievementRequirement, Achievement, Question, Quiz, Chapter, Base
+from app.models import SpecialQuizAchievementRequirement, Achievement, Question, Quiz, Chapter
 from app.db import Base
 
 # Set up database connection
