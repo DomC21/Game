@@ -350,6 +350,38 @@ def seed_data():
                 "chapter_id": 5
             },
             {
+                "title": "Risk Aware",
+                "description": "Complete all 22 subsections with 80%+ on the quiz",
+                "badge_image": "badge-risk-aware.png",
+                "requirement_type": "quiz_score",
+                "requirement_value": 80,
+                "chapter_id": 6
+            },
+            {
+                "title": "Drawdown Defender",
+                "description": "Demonstrate strategies to limit your portfolio's maximum drawdown in a simulated environment",
+                "badge_image": "badge-drawdown-defender.png",
+                "requirement_type": "special_quiz_achievement",
+                "requirement_value": 1,
+                "chapter_id": 6
+            },
+            {
+                "title": "Hedging Hero",
+                "description": "Successfully apply a hedging technique (like buying puts or shorting an index) in a scenario-based mini-game",
+                "badge_image": "badge-hedging-hero.png",
+                "requirement_type": "special_quiz_achievement",
+                "requirement_value": 1,
+                "chapter_id": 6
+            },
+            {
+                "title": "Kelly Cadet",
+                "description": "Implement the Kelly Criterion in a practice scenario and compare results to a fixed fractional approach",
+                "badge_image": "badge-kelly-cadet.png",
+                "requirement_type": "special_quiz_achievement",
+                "requirement_value": 1,
+                "chapter_id": 6
+            },
+            {
                 "title": "Technical Analyst",
                 "description": "Complete all chapters in Level 3",
                 "badge_image": "badge-technical-analyst.png",

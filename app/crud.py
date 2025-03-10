@@ -662,6 +662,118 @@ def check_achievements(db: Session, user_id: int) -> List[models.Achievement]:
                         if all_correct and ips_questions:
                             earned = True
                             break
+            
+            elif achievement.title == "Risk Aware":
+                # For the Risk Aware achievement, we need to check if the user has completed
+                # the Chapter 6 quiz with a high score (80% or higher)
+                
+                # Get all quiz attempts for Chapter 6
+                quiz_attempts = get_quiz_attempts(db, user_id)
+                for attempt in quiz_attempts:
+                    quiz = get_quiz(db, attempt.quiz_id)
+                    # Check if this is the Chapter 6 quiz
+                    if quiz and quiz.chapter_id == 6:
+                        # Check if the score is high enough (80% or higher)
+                        score_percentage = (attempt.score / attempt.max_score * 100) if attempt.max_score > 0 else 0
+                        if score_percentage >= 80:
+                            earned = True
+                            break
+            
+            elif achievement.title == "Drawdown Defender":
+                # For the Drawdown Defender achievement, we need to check if the user has correctly
+                # answered all drawdown-related questions in the Chapter 6 quiz
+                
+                # Get all quiz attempts for Chapter 6
+                quiz_attempts = get_quiz_attempts(db, user_id)
+                for attempt in quiz_attempts:
+                    quiz = get_quiz(db, attempt.quiz_id)
+                    # Check if this is the Chapter 6 quiz
+                    if quiz and quiz.chapter_id == 6:
+                        # Get the drawdown-related questions
+                        drawdown_questions = [q for q in get_questions_by_quiz(db, quiz.id) 
+                                          if any(term in q.question_text.lower() for term in 
+                                              ["drawdown", "maximum drawdown", "peak-to-trough", "portfolio drawdown"])]
+                        
+                        # Check if all drawdown questions were answered correctly
+                        all_correct = True
+                        for question in drawdown_questions:
+                            # Get the user's answer for this question
+                            user_answer = db.query(models.QuizAnswer).filter(
+                                models.QuizAnswer.user_id == user_id,
+                                models.QuizAnswer.question_id == question.id
+                            ).first()
+                            
+                            if not user_answer or not user_answer.is_correct:
+                                all_correct = False
+                                break
+                        
+                        if all_correct and drawdown_questions:
+                            earned = True
+                            break
+            
+            elif achievement.title == "Hedging Hero":
+                # For the Hedging Hero achievement, we need to check if the user has correctly
+                # answered all hedging-related questions in the Chapter 6 quiz
+                
+                # Get all quiz attempts for Chapter 6
+                quiz_attempts = get_quiz_attempts(db, user_id)
+                for attempt in quiz_attempts:
+                    quiz = get_quiz(db, attempt.quiz_id)
+                    # Check if this is the Chapter 6 quiz
+                    if quiz and quiz.chapter_id == 6:
+                        # Get the hedging-related questions
+                        hedging_questions = [q for q in get_questions_by_quiz(db, quiz.id) 
+                                         if any(term in q.question_text.lower() for term in 
+                                             ["hedging", "protective put", "options", "futures", "inverse etf"])]
+                        
+                        # Check if all hedging questions were answered correctly
+                        all_correct = True
+                        for question in hedging_questions:
+                            # Get the user's answer for this question
+                            user_answer = db.query(models.QuizAnswer).filter(
+                                models.QuizAnswer.user_id == user_id,
+                                models.QuizAnswer.question_id == question.id
+                            ).first()
+                            
+                            if not user_answer or not user_answer.is_correct:
+                                all_correct = False
+                                break
+                        
+                        if all_correct and hedging_questions:
+                            earned = True
+                            break
+            
+            elif achievement.title == "Kelly Cadet":
+                # For the Kelly Cadet achievement, we need to check if the user has correctly
+                # answered all Kelly Criterion-related questions in the Chapter 6 quiz
+                
+                # Get all quiz attempts for Chapter 6
+                quiz_attempts = get_quiz_attempts(db, user_id)
+                for attempt in quiz_attempts:
+                    quiz = get_quiz(db, attempt.quiz_id)
+                    # Check if this is the Chapter 6 quiz
+                    if quiz and quiz.chapter_id == 6:
+                        # Get the Kelly Criterion-related questions
+                        kelly_questions = [q for q in get_questions_by_quiz(db, quiz.id) 
+                                       if any(term in q.question_text.lower() for term in 
+                                           ["kelly criterion", "kelly formula", "optimal position size", "fractional kelly"])]
+                        
+                        # Check if all Kelly Criterion questions were answered correctly
+                        all_correct = True
+                        for question in kelly_questions:
+                            # Get the user's answer for this question
+                            user_answer = db.query(models.QuizAnswer).filter(
+                                models.QuizAnswer.user_id == user_id,
+                                models.QuizAnswer.question_id == question.id
+                            ).first()
+                            
+                            if not user_answer or not user_answer.is_correct:
+                                all_correct = False
+                                break
+                        
+                        if all_correct and kelly_questions:
+                            earned = True
+                            break
         
         # Award achievement if earned
         if earned:
